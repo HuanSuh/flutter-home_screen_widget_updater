@@ -24,7 +24,7 @@
         <entry file="file://$PROJECT_DIR$/lib/home_screen_widget_updater.dart">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="60">
-              <caret line="7" column="29" lean-forward="true" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="29" />
+              <caret line="7" column="29" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="29" />
             </state>
           </provider>
         </entry>
@@ -32,11 +32,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/android/src/main/kotlin/doodle/fac/home_screen_widget_updater/HomeScreenWidgetProvider.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="24" column="30" lean-forward="true" selection-start-line="24" selection-start-column="30" selection-end-line="24" selection-end-column="30" />
-              <folding>
-                <element signature="e#47#398#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="210">
+              <caret line="24" column="26" selection-start-line="24" selection-start-column="26" selection-end-line="24" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -44,8 +41,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/android/src/main/kotlin/doodle/fac/home_screen_widget_updater/HomeScreenWidgetUpdaterPlugin.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-58">
-              <caret line="3" column="34" lean-forward="true" selection-start-line="3" selection-start-column="34" selection-end-line="3" selection-end-column="34" />
+            <state relative-caret-position="45">
+              <caret line="3" column="34" selection-start-line="3" selection-start-column="34" selection-end-line="3" selection-end-column="34" />
             </state>
           </provider>
         </entry>
@@ -71,6 +68,9 @@
       <find>JSON</find>
     </findStrings>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
@@ -88,6 +88,7 @@
     <option name="width" value="1440" />
     <option name="height" value="877" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -120,9 +121,9 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="AndroidView" />
       <pane id="Scope" />
+      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -155,13 +156,20 @@
       <option name="presentableId" value="Default" />
       <updated>1584614605579</updated>
     </task>
+    <task id="LOCAL-00001" summary="initial commit">
+      <created>1584701336157</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1584701336157</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="877" extended-state="6" />
-    <editor active="true" />
+    <frame x="0" y="23" width="1440" height="877" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16094421" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16094421" />
       <window_info id="Captures" order="1" side_tool="true" />
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Image Layers" order="3" />
@@ -176,9 +184,9 @@
       <window_info anchor="bottom" id="Android Profiler" order="3" show_stripe_button="false" />
       <window_info anchor="bottom" id="Logcat" order="4" />
       <window_info anchor="bottom" id="Debug" order="5" weight="0.3299363" />
-      <window_info anchor="bottom" id="Terminal" order="6" />
-      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
-      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Terminal" order="6" weight="0.3299363" />
+      <window_info active="true" anchor="bottom" id="Event Log" order="7" sideWeight="0.5007153" side_tool="true" visible="true" weight="0.3299363" />
+      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49928468" visible="true" weight="0.3299363" />
       <window_info anchor="bottom" id="Find" order="9" />
       <window_info anchor="right" id="Device File Explorer" order="0" side_tool="true" />
       <window_info anchor="right" id="Capture Analysis" order="1" />
@@ -190,6 +198,36 @@
       <window_info anchor="right" id="Flutter Performance" order="7" />
       <window_info anchor="right" id="Palette&#9;" order="8" />
     </layout>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="initial commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="initial commit" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/test/home_screen_widget_updater_test.dart">
@@ -220,29 +258,29 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/lib/home_screen_widget_updater.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="7" column="29" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/android/src/main/kotlin/doodle/fac/home_screen_widget_updater/HomeScreenWidgetProvider.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="24" column="30" lean-forward="true" selection-start-line="24" selection-start-column="30" selection-end-line="24" selection-end-column="30" />
-          <folding>
-            <element signature="e#47#398#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="210">
+          <caret line="24" column="26" selection-start-line="24" selection-start-column="26" selection-end-line="24" selection-end-column="26" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/android/src/main/kotlin/doodle/fac/home_screen_widget_updater/HomeScreenWidgetUpdaterPlugin.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-58">
-          <caret line="3" column="34" lean-forward="true" selection-start-line="3" selection-start-column="34" selection-end-line="3" selection-end-column="34" />
+        <state relative-caret-position="45">
+          <caret line="3" column="34" selection-start-line="3" selection-start-column="34" selection-end-line="3" selection-end-column="34" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/home_screen_widget_updater.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="7" column="29" lean-forward="true" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="29" />
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png">
+      <provider selected="true" editor-type-id="images" />
     </entry>
     <entry file="file://$PROJECT_DIR$/example/lib/main.dart">
       <provider selected="true" editor-type-id="text-editor">
