@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/services.dart';
 
@@ -21,8 +22,10 @@ class HomeScreenWidgetUpdater {
           return null;
         });
   static Future<bool> updateHomeScreenWidget([Map<String, dynamic> args]) {
-    return _channel.invokeMethod('updateHomeScreenWidget',
-        args != null ? JsonEncoder().convert(args) : null);
+    if (Platform.isAndroid)
+      return _channel.invokeMethod('updateHomeScreenWidget',
+          args != null ? JsonEncoder().convert(args) : null);
+    return Future.value(false);
   }
 
   static OnUpdateRequest _onUpdateRequest;
@@ -45,7 +48,8 @@ class UpdateRequest {
     try {
       final map = JsonDecoder().convert(arguments) as Map<String, dynamic>;
       if (map != null) {
-        return UpdateRequest(map['type'], map['data'] != null ? JsonDecoder().convert(map['data']) : null);
+        return UpdateRequest(map['type'],
+            map['data'] != null ? JsonDecoder().convert(map['data']) : null);
       }
     } catch (_) {}
     return UpdateRequest(null, null);
