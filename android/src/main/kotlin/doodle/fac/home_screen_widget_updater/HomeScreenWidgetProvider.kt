@@ -6,11 +6,10 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import android.util.Log
 import android.widget.RemoteViews
 import org.json.JSONObject
-import java.io.Serializable
+import java.lang.Exception
 
 const val HOME_SCREEN_WIDGET_DATA_KEY: String = "HOME_SCREEN_WIDGET_DATA"
 abstract class HomeScreenWidgetProvider: AppWidgetProvider() {
@@ -25,7 +24,7 @@ abstract class HomeScreenWidgetProvider: AppWidgetProvider() {
         if(!initialized) {
             initialized = true
             Log.d("HomeScreenWidget", "Initialize")
-            requestUpdate(context, null, "INIT")
+            requestInitialize(context)
         }
     }
 
@@ -35,47 +34,85 @@ abstract class HomeScreenWidgetProvider: AppWidgetProvider() {
         when(intent.action) {
             AppWidgetManager.ACTION_APPWIDGET_UPDATE -> {
                 AppWidgetManager.getInstance(context.applicationContext).let {
-                    val appWidgetIds = it.getAppWidgetIds(ComponentName(context.applicationContext, this::class.java))
-                    if (appWidgetIds != null && appWidgetIds.isNotEmpty()) {
-                        for (appWidgetId in appWidgetIds) {
-                            updateAppWidget(context, it, appWidgetId, parseData(intent))
+                    it.getAppWidgetIds(ComponentName(context.applicationContext, this::class.java))?.let { ids ->
+                        ids.forEach {widgetId ->
+                            parseData(intent)?.let { request ->
+                                if(request.widgetId == null || request.widgetId == widgetId) {
+                                    updateAppWidget(context, it, widgetId, request.data)
+                                }
+                            }
                         }
                     }
                 }
             }
             HOME_SCREEN_WIDGET_UPDATE_ACTION -> {
-                requestUpdate(context, intent.getStringExtra("data"), "UPDATE")
+                val targetWidgetId = if(intent.hasExtra("widgetId"))
+                    intent.getIntExtra("widgetId", -1) else null
+                requestUpdate(context, targetWidgetId, intent.getStringExtra("data"))
             }
         }
     }
 
-    abstract fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int, jsonObject: JSONObject?)
-    private fun parseData(intent: Intent): JSONObject? {
+    abstract fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int, updateRequest: JSONObject?)
+    private fun parseData(intent: Intent): UpdateRequest? {
         intent.getStringExtra(HOME_SCREEN_WIDGET_DATA_KEY).let {
-            if (!it.isNullOrEmpty()) return JSONObject(it)
+            if (!it.isNullOrEmpty()) {
+                var widgetId : Int? = null
+                var data: JSONObject? = null
+                val jsonObj = JSONObject(it)
+                try {
+                    widgetId = jsonObj.getInt("widgetId")
+                } catch (ignore: Exception) {}
+                try {
+                    data = JSONObject(jsonObj.getString("data"))
+                } catch (ignore: Exception) {}
+                return UpdateRequest(widgetId, data)
+            }
         }
         return null
     }
 
-    protected fun setUpdateRequestListener(context: Context?, remoteViews: RemoteViews, viewId: Int) {
-        setUpdateRequestListener(context, remoteViews, viewId, null)
-    }
-    protected fun setUpdateRequestListener(context: Context?, remoteViews: RemoteViews, viewId: Int, data: JSONObject?) {
+    protected fun setUpdateRequestListener(context: Context?, appWidgetId: Int?, remoteViews: RemoteViews, viewId: Int, updateRequest: UpdateRequest?) {
         val intent = Intent(context, javaClass)
         intent.action = HOME_SCREEN_WIDGET_UPDATE_ACTION
-        if(data != null) {
-            intent.putExtra("data", data.toString())
+        updateRequest?.widgetId?.let{
+            intent.putExtra("widgetId", it)
         }
-        val pendingIntent = PendingIntent.getBroadcast(context, viewId, intent, PendingIntent.FLAG_CANCEL_CURRENT)
-        remoteViews.setOnClickPendingIntent(viewId, pendingIntent)
+        updateRequest?.data?.let {
+            intent.putExtra("data", it.toString())
+        }
+        remoteViews.setOnClickPendingIntent(viewId, PendingIntent.getBroadcast(
+                context,
+                (appWidgetId?:1) * viewId,
+                intent,
+                PendingIntent.FLAG_CANCEL_CURRENT
+        ))
     }
 
-    private fun requestUpdate(context: Context?, data: String?, type: String) {
-        context?.let{
-            val map = HashMap<String, Any?>()
-            map["type"] = type
-            map["data"] = if(data != null) JSONObject(data).toString() else null
-            HomeScreenWidgetUpdaterPlugin.requestWidgetUpdate(JSONObject(map).toString())
+    private fun requestInitialize(context: Context?) {
+        context?.let {
+            HomeScreenWidgetUpdaterPlugin.requestWidgetInitialize()
         }
+    }
+    private fun requestUpdate(context: Context?, targetWidgetId: Int?, data: String?) {
+        context?.let{
+            HomeScreenWidgetUpdaterPlugin.requestWidgetUpdate(
+                UpdateRequest(
+                    targetWidgetId,
+                    if(data != null) JSONObject(data) else null
+                )
+            )
+        }
+    }
+}
+
+class UpdateRequest(val widgetId: Int?, val data: JSONObject?) {
+    constructor(jsonObject: JSONObject?): this(jsonObject?.getInt("widgetId"), jsonObject?.getJSONObject("data"))
+
+    fun serialize(): String {
+        val map: HashMap<String, Any?> = HashMap()
+        map["widgetId"] = widgetId
+        map["data"] = data?.toString()
+        return JSONObject(map).toString()
     }
 }

@@ -4,27 +4,32 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 
-typedef OnUpdateRequest = Function(UpdateRequest request);
+enum UpdateRequestType { INIT, UPDATE }
+typedef OnUpdateRequest = Function(
+    UpdateRequestType type, UpdateRequest request);
 
 class HomeScreenWidgetUpdater {
   static MethodChannel _channel =
       const MethodChannel('home_screen_widget_updater')
         ..setMethodCallHandler((call) {
-          if (call.method == "requestWidgetUpdate") {
+          if (call.method == "requestWidgetInitialize" ||
+              call.method == "requestWidgetUpdate") {
             if (_onUpdateRequest != null) {
+              UpdateRequestType type = call.method == "requestWidgetUpdate"
+                  ? UpdateRequestType.UPDATE
+                  : UpdateRequestType.INIT;
               if (call.arguments != null) {
-                _onUpdateRequest(UpdateRequest.json(call.arguments));
+                _onUpdateRequest(type, UpdateRequest.json(call.arguments));
               } else {
-                _onUpdateRequest(null);
+                _onUpdateRequest(type, null);
               }
             }
           }
           return null;
         });
-  static Future<bool> updateHomeScreenWidget([Map<String, dynamic> args]) {
+  static Future<bool> updateHomeScreenWidget({int widgetId, Map<String, dynamic> args}) {
     if (Platform.isAndroid)
-      return _channel.invokeMethod('updateHomeScreenWidget',
-          args != null ? JsonEncoder().convert(args) : null);
+      return _channel.invokeMethod('updateHomeScreenWidget', UpdateRequest(widgetId, args).serialize());
     return Future.value(false);
   }
 
@@ -34,24 +39,28 @@ class HomeScreenWidgetUpdater {
   }
 }
 
-enum UpdateRequestType { INIT, UPDATE }
-
 class UpdateRequest {
-  final UpdateRequestType type;
+  final int widgetId;
   final Map<String, dynamic> data;
 
-  UpdateRequest(String type, this.data)
-      : this.type = (type == 'INIT')
-            ? UpdateRequestType.INIT
-            : UpdateRequestType.UPDATE;
+  UpdateRequest(this.widgetId, this.data);
+
   factory UpdateRequest.json(dynamic arguments) {
     try {
       final map = JsonDecoder().convert(arguments) as Map<String, dynamic>;
       if (map != null) {
-        return UpdateRequest(map['type'],
-            map['data'] != null ? JsonDecoder().convert(map['data']) : null);
+        return UpdateRequest(
+          map['widgetId'],
+          map['data'] != null ? JsonDecoder().convert(map['data']) : null,
+        );
       }
     } catch (_) {}
     return UpdateRequest(null, null);
+  }
+  String serialize() {
+    return JsonEncoder().convert({
+      'widgetId': widgetId,
+      'data': data == null ? null : JsonEncoder().convert(data),
+    });
   }
 }

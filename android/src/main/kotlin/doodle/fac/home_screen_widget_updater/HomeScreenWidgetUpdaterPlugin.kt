@@ -44,8 +44,12 @@ public class HomeScreenWidgetUpdaterPlugin: FlutterPlugin, MethodCallHandler {
       }
     }
 
-    fun requestWidgetUpdate(args: String?) {
-      channel?.invokeMethod("requestWidgetUpdate", args)
+    fun requestWidgetInitialize() {
+      channel?.invokeMethod("requestWidgetInitialize", null)
+    }
+
+    fun requestWidgetUpdate(updateRequest: UpdateRequest) {
+      channel?.invokeMethod("requestWidgetUpdate", updateRequest.serialize())
     }
   }
 
