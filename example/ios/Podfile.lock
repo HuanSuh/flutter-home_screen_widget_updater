@@ -1,0 +1,22 @@
+PODS:
+  - Flutter (1.0.0)
+  - home_screen_widget_updater (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - home_screen_widget_updater (from `.symlinks/plugins/home_screen_widget_updater/ios`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  home_screen_widget_updater:
+    :path: ".symlinks/plugins/home_screen_widget_updater/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  home_screen_widget_updater: 67ce2a9f807f3aca313e4444c3d9f8933ae4b034
+
+PODFILE CHECKSUM: 1b66dae606f75376c5f2135a8290850eeb09ae83
+
+COCOAPODS: 1.7.5

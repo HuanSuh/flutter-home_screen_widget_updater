@@ -53,7 +53,11 @@ abstract class HomeScreenWidgetProvider: AppWidgetProvider() {
         }
     }
 
+    /**
+     * Implement updateAppWidget and call appWidgetManager.updateAppWidget(appWidgetId, remoteView).
+     * */
     abstract fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int, updateRequest: JSONObject?)
+
     private fun parseData(intent: Intent): UpdateRequest? {
         intent.getStringExtra(HOME_SCREEN_WIDGET_DATA_KEY).let {
             if (!it.isNullOrEmpty()) {
@@ -72,6 +76,10 @@ abstract class HomeScreenWidgetProvider: AppWidgetProvider() {
         return null
     }
 
+
+    /**
+     * Use setUpdateRequestListener to request update from widget
+     * */
     protected fun setUpdateRequestListener(context: Context?, appWidgetId: Int?, remoteViews: RemoteViews, viewId: Int, updateRequest: UpdateRequest?) {
         val intent = Intent(context, javaClass)
         intent.action = HOME_SCREEN_WIDGET_UPDATE_ACTION

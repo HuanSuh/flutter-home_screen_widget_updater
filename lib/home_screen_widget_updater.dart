@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/services.dart';
 
@@ -27,10 +26,18 @@ class HomeScreenWidgetUpdater {
           }
           return null;
         });
-  static Future<bool> updateHomeScreenWidget({int widgetId, Map<String, dynamic> args}) {
-    if (Platform.isAndroid)
-      return _channel.invokeMethod('updateHomeScreenWidget', UpdateRequest(widgetId, args).serialize());
-    return Future.value(false);
+
+  static Future<bool> updateHomeScreenWidget(
+      {Map<String, dynamic> args, int widgetId, String appGroupName}) {
+    try {
+      return _channel.invokeMethod(
+        'updateHomeScreenWidget',
+        UpdateRequest(args, widgetId: widgetId, appGroupName: appGroupName)
+            .serialize(),
+      );
+    } catch (e) {
+      return Future.error(e);
+    }
   }
 
   static OnUpdateRequest _onUpdateRequest;
@@ -42,25 +49,28 @@ class HomeScreenWidgetUpdater {
 class UpdateRequest {
   final int widgetId;
   final Map<String, dynamic> data;
+  final String appGroupName;
 
-  UpdateRequest(this.widgetId, this.data);
+  UpdateRequest(this.data, {this.widgetId, this.appGroupName});
 
   factory UpdateRequest.json(dynamic arguments) {
     try {
       final map = JsonDecoder().convert(arguments) as Map<String, dynamic>;
       if (map != null) {
         return UpdateRequest(
-          map['widgetId'],
           map['data'] != null ? JsonDecoder().convert(map['data']) : null,
+          widgetId: map['widgetId'],
+          appGroupName: map['appGroupName'],
         );
       }
     } catch (_) {}
-    return UpdateRequest(null, null);
+    return UpdateRequest(null);
   }
   String serialize() {
     return JsonEncoder().convert({
-      'widgetId': widgetId,
       'data': data == null ? null : JsonEncoder().convert(data),
+      'widgetId': widgetId,
+      'appGroupName': appGroupName,
     });
   }
 }
