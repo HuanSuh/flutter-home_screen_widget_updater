@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 enum UpdateRequestType { INIT, UPDATE }
@@ -24,6 +25,11 @@ class HomeScreenWidgetUpdater {
               }
             }
           }
+          if (call.method == "startAppWithData") {
+            if (_onAppStarted != null) {
+              _onAppStarted(call.arguments?.toString());
+            }
+          }
           return null;
         });
 
@@ -43,6 +49,11 @@ class HomeScreenWidgetUpdater {
   static OnUpdateRequest _onUpdateRequest;
   static set onUpdateRequest(OnUpdateRequest value) {
     _onUpdateRequest = value;
+  }
+
+  static ValueChanged<String> _onAppStarted;
+  static set onAppStarted(ValueChanged<String> value) {
+    _onAppStarted = value;
   }
 }
 
