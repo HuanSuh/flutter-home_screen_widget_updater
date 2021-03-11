@@ -12,23 +12,25 @@ class HomeScreenWidgetUpdater {
   static MethodChannel _channel =
       const MethodChannel('home_screen_widget_updater')
         ..setMethodCallHandler((call) {
-          if (call.method == "requestWidgetInitialize" ||
-              call.method == "requestWidgetUpdate") {
-            if (_onUpdateRequest != null) {
-              UpdateRequestType type = call.method == "requestWidgetUpdate"
-                  ? UpdateRequestType.UPDATE
-                  : UpdateRequestType.INIT;
-              if (call.arguments != null) {
-                _onUpdateRequest(type, UpdateRequest.json(call.arguments));
-              } else {
-                _onUpdateRequest(type, null);
+          switch (call.method) {
+            case "requestWidgetInitialize":
+            case "requestWidgetUpdate":
+              if (_onUpdateRequest != null) {
+                UpdateRequestType type = call.method == "requestWidgetUpdate"
+                    ? UpdateRequestType.UPDATE
+                    : UpdateRequestType.INIT;
+                if (call.arguments != null) {
+                  _onUpdateRequest(type, UpdateRequest.json(call.arguments));
+                } else {
+                  _onUpdateRequest(type, null);
+                }
               }
-            }
-          }
-          if (call.method == "startAppWithData") {
-            if (_onAppStarted != null) {
-              _onAppStarted(call.arguments?.toString());
-            }
+              break;
+            case "startAppWithData":
+              if (_onAppStarted != null) {
+                _onAppStarted(call.arguments?.toString());
+              }
+              break;
           }
           return null;
         });
