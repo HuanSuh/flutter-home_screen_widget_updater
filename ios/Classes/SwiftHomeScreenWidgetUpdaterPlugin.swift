@@ -15,6 +15,7 @@ public class SwiftHomeScreenWidgetUpdaterPlugin: NSObject, FlutterPlugin {
             if let jsonStr: String = call.arguments as? String, let json: [String:Any?] = convertToDictionary(text: jsonStr), let dataJsonStr: String = json["data"] as? String, let dataDict: [String:Any?] = convertToDictionary(text: dataJsonStr) {
                 if let appGroupName = json["appGroupName"] as? String, let sharedContainer = UserDefaults(suiteName:  appGroupName) {
                     sharedContainer.set(dataDict as NSDictionary, forKey: "HOME_SCREEN_WIDGET_DATA_KEY")
+                    refreshTimelines()
                     result(true)
                     break
                 }
@@ -35,5 +36,10 @@ public class SwiftHomeScreenWidgetUpdaterPlugin: NSObject, FlutterPlugin {
             }
         }
         return nil
+    }
+
+    @available(iOS 12.0, *)
+    func refreshTimelines() {
+        WidgetCenter.shared.refreshAllTimelines()
     }
 }
