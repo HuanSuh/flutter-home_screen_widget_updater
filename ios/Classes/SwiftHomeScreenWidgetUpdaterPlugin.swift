@@ -1,5 +1,6 @@
 import Flutter
 import UIKit
+import WidgetKit
 
 public class SwiftHomeScreenWidgetUpdaterPlugin: NSObject, FlutterPlugin {
     
@@ -27,7 +28,7 @@ public class SwiftHomeScreenWidgetUpdaterPlugin: NSObject, FlutterPlugin {
         }
     }
 
-    func convertToDictionary(text: String) -> [String: Any]? {
+    private func convertToDictionary(text: String) -> [String: Any]? {
         if let data = text.data(using: .utf8) {
             do {
                 return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
@@ -38,8 +39,9 @@ public class SwiftHomeScreenWidgetUpdaterPlugin: NSObject, FlutterPlugin {
         return nil
     }
 
-    @available(iOS 12.0, *)
-    func refreshTimelines() {
-        WidgetCenter.shared.refreshAllTimelines()
+    private func refreshTimelines() {
+        if #available(iOS 14.0, *) {
+            WidgetCenter.shared.reloadAllTimelines()
+        }
     }
 }
