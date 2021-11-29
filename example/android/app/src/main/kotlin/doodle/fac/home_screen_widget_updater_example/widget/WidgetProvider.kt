@@ -5,6 +5,7 @@ import android.widget.RemoteViews
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import doodle.fac.home_screen_widget_updater.HomeScreenWidgetProvider
 import doodle.fac.home_screen_widget_updater.UpdateRequest
 import doodle.fac.home_screen_widget_updater_example.MainActivity
@@ -24,8 +25,12 @@ class WidgetProvider: HomeScreenWidgetProvider() {
 
     private fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
         val remoteView = RemoteViews(context.packageName, R.layout.homescreen_widget)
-        val intent = Intent(context, MainActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+
+        var flags: Int = PendingIntent.FLAG_UPDATE_CURRENT
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            flags = flags or PendingIntent.FLAG_IMMUTABLE
+        }
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, Intent(context, MainActivity::class.java), flags)
         remoteView.setOnClickPendingIntent(R.id.widget_layout, pendingIntent)
 //        setUpdateRequestListener(context, appWidgetId, remoteView, R.id.widget_btn_request_update,
 //            UpdateRequest(appWidgetId, null)
@@ -35,7 +40,11 @@ class WidgetProvider: HomeScreenWidgetProvider() {
 
     override fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int, updateRequest: JSONObject?) {
         val remoteView = RemoteViews(context.packageName, R.layout.homescreen_widget)
-        val pendingIntent = PendingIntent.getActivity(context, 0, Intent(context, MainActivity::class.java), 0)
+        var flags: Int = PendingIntent.FLAG_UPDATE_CURRENT
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            flags = flags or PendingIntent.FLAG_IMMUTABLE
+        }
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, Intent(context, MainActivity::class.java), flags)
         remoteView.setOnClickPendingIntent(R.id.widget_layout, pendingIntent)
         remoteView.setTextViewText(R.id.widget_text_value, updateRequest?.get("data")?.toString() ?: "")
         Calendar.getInstance().let {
