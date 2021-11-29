@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.util.Log
 import android.widget.RemoteViews
 import org.json.JSONObject
@@ -89,12 +90,13 @@ abstract class HomeScreenWidgetProvider: AppWidgetProvider() {
         updateRequest?.data?.let {
             intent.putExtra("data", it.toString())
         }
-        remoteViews.setOnClickPendingIntent(viewId, PendingIntent.getBroadcast(
-                context,
-                (appWidgetId?:1) * viewId,
-                intent,
-                PendingIntent.FLAG_CANCEL_CURRENT
-        ))
+
+        var flags: Int = PendingIntent.FLAG_UPDATE_CURRENT
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            flags = flags or PendingIntent.FLAG_IMMUTABLE
+        }
+        val pendingIntent: PendingIntent = PendingIntent.getBroadcast(context, 0, intent, flags)
+        remoteViews.setOnClickPendingIntent(viewId, pendingIntent)
     }
 
     private fun requestInitialize(context: Context?) {
