@@ -1,11 +1,13 @@
 package doodle.fac.home_screen_widget_updater
 
+import android.app.Activity
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.util.Log
 import android.widget.RemoteViews
@@ -16,6 +18,7 @@ const val HOME_SCREEN_WIDGET_DATA_KEY: String = "HOME_SCREEN_WIDGET_DATA"
 abstract class HomeScreenWidgetProvider: AppWidgetProvider() {
     companion object {
         private const val HOME_SCREEN_WIDGET_UPDATE_ACTION: String = "doodle.fac.home_screen_widget_updater.action.update"
+        private const val HOME_SCREEN_WIDGET_LAUNCH_ACTION: String = "es.antonborri.home_widget.action.LAUNCH"
     }
 
     private var initialized: Boolean = false
@@ -113,6 +116,18 @@ abstract class HomeScreenWidgetProvider: AppWidgetProvider() {
                 )
             )
         }
+    }
+
+    fun <T> getPendingIntent(context: Context, activityClass: Class<T>, uri: Uri? = null): PendingIntent where T: Activity {
+        val intent = Intent(context, activityClass)
+        intent.data = uri
+        intent.action = HOME_SCREEN_WIDGET_LAUNCH_ACTION
+        var flags = PendingIntent.FLAG_UPDATE_CURRENT
+        if (Build.VERSION.SDK_INT >= 23) {
+            flags = flags or PendingIntent.FLAG_IMMUTABLE
+        }
+
+        return PendingIntent.getActivity(context, 0, intent, flags)
     }
 }
 
