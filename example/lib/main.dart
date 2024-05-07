@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:home_screen_widget_updater/home_screen_widget_updater.dart';
 
 void main() =>
@@ -17,7 +15,7 @@ class _MyPageState extends State<MyPage> {
 
   @override
   void dispose() {
-    _controller?.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -40,23 +38,23 @@ class _MyPageState extends State<MyPage> {
             ),
           ),
           SizedBox(height: 8),
-          RaisedButton(
+          TextButton(
             onPressed: () async {
               try {
                 bool result =
                     await HomeScreenWidgetUpdater.updateHomeScreenWidget(
                   args: {
-                    'data': _controller?.text?.isNotEmpty == true
+                    'data': _controller.text.isNotEmpty == true
                         ? _controller.text
                         : '-',
                     'type': 'type'
                   },
                   appGroupName: 'group.widgetupdater',
                 );
-                Scaffold.of(context)
-                    .showSnackBar(SnackBar(content: Text('result : $result')));
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('result : $result')));
               } catch (e) {
-                Scaffold.of(context)
+                ScaffoldMessenger.of(context)
                     .showSnackBar(SnackBar(content: Text('result : $e')));
               }
             },
